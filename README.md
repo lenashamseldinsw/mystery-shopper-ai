@@ -1,78 +1,102 @@
-# تحليل مراكز الخدمة - جمارك أبوظبي
+# Abu Dhabi Customs Service Center Analysis
+## تحليل مراكز الخدمة - جمارك أبوظبي
 
-تطبيق Streamlit مدعوم بالذكاء الاصطناعي لتحليل أداء مراكز الخدمة وإنتاج تحليلات ذكية باللغة العربية باستخدام Gemini Flash.
+A Streamlit application powered by AI for analyzing service center performance data and generating intelligent insights in Arabic using Gemini Flash.
 
-## التثبيت والتشغيل
+## 🚀 Quick Start
 
-1. تثبيت المتطلبات:
+1. **Install dependencies:**
 ```bash
 pip install -r requirements.txt
 ```
 
-2. إعداد مفتاح API (اختر إحدى الطرق):
+2. **Set up your API key (choose one method):**
 
-**الطريقة الأولى: استخدام Streamlit Secrets (موصى به للنشر)**
-```bash
-# تحرير ملف .streamlit/secrets.toml وإضافة مفتاح API
+**Method 1: Streamlit Secrets (Recommended for deployment)**
+```toml
+# Edit .streamlit/secrets.toml and add your API key
 [gemini]
 api_key = "your_actual_api_key_here"
 ```
 
-**الطريقة الثانية: متغيرات البيئة**
+**Method 2: Environment Variable**
 ```bash
 export GEMINI_API_KEY="your_api_key_here"
 ```
 
-**الطريقة الثالثة: الإدخال اليدوي**
-- سيطلب منك التطبيق إدخال المفتاح في الشريط الجانبي
+**Method 3: Manual Input**
+- The app will prompt you to enter the key in the sidebar
 
-3. تشغيل التطبيق:
+3. **Run the application:**
 ```bash
 streamlit run streamlit_analysis.py
 ```
 
-## الميزات الجديدة 🚀
+## ✨ Features
 
-- **تحليل ذكي بالذكاء الاصطناعي**: استخدام Gemini Flash لتوليد تحليلات عميقة
-- **ملخص تنفيذي مخصص**: تحليل البيانات الفعلية وتوليد رؤى مخصصة
-- **توصيات ذكية**: اقتراحات محددة وقابلة للتطبيق للتحسين
-- تحميل بيانات JSON وتحليلها
-- حساب المعدل الكلي للأداء
-- عرض مؤشر دائري للنتيجة الإجمالية
-- تفصيل الأداء حسب المحاور والعناصر الفرعية
-- دعم RTL للنصوص العربية
-- حماية مفاتيح API عبر .gitignore
-- **إدارة آمنة للمفاتيح السرية**: استخدام Streamlit Secrets
-- **حماية الملفات الحساسة**: إخفاء ملفات MS Use Case والبيانات الحساسة
-- **جاهز للنشر**: دعم Streamlit Cloud وHeroku وDocker
+- **AI-Powered Analysis**: Uses Gemini Flash to generate deep analytical insights
+- **Custom Executive Summary**: Analyzes actual data and generates tailored insights
+- **Smart Recommendations**: Specific and actionable improvement suggestions
+- JSON data loading and analysis
+- Overall performance score calculation
+- Circular gauge display for total score
+- Performance breakdown by pillars and sub-elements
+- RTL support for Arabic text
+- API key protection via .gitignore
+- **Secure Secret Management**: Uses Streamlit Secrets
+- **Sensitive File Protection**: Hides MS Use Case files and sensitive data
+- **Deployment Ready**: Supports Streamlit Cloud, Heroku, and Docker
 
-## هيكل البيانات
+## 📊 Data Structure
 
-يتوقع التطبيق ملف JSON يحتوي على:
-- المحاور الرئيسية (pillars)
-- المحاور الفرعية (sub_pillars) 
-- الخصائص (attributes) مع النتائج والملاحظات
+The application expects a JSON file containing:
+- Main pillars (المحاور الرئيسية)
+- Sub-pillars (المحاور الفرعية)
+- Attributes with scores and notes (الخصائص مع النتائج والملاحظات)
 
-## الاستخدام
+## 📱 Usage
 
-1. افتح التطبيق في المتصفح
-2. ارفع ملف JSON أو استخدم الملف الافتراضي
-3. اعرض الملخص التنفيذي والتحليل التفصيلي
-4. حمل التقارير العربية بصيغة DOCX
+1. Open the application in your browser
+2. Upload a JSON file or use the default file
+3. View the executive summary and detailed analysis
+4. Download Arabic reports in DOCX format
 
-## 🚀 النشر والتوزيع
+## 🚀 Deployment
 
-للحصول على دليل شامل للنشر، راجع [DEPLOYMENT.md](DEPLOYMENT.md) والذي يتضمن:
+For a comprehensive deployment guide, see [DEPLOYMENT.md](DEPLOYMENT.md) which includes:
 
-- النشر على Streamlit Community Cloud
-- النشر على Heroku
-- النشر باستخدام Docker
-- أفضل الممارسات الأمنية
-- حل المشاكل الشائعة
+- Streamlit Community Cloud deployment
+- Heroku deployment
+- Docker deployment
+- Security best practices
+- Troubleshooting common issues
 
-## 🔐 الأمان
+## 🔐 Security Features
 
-- إدارة آمنة للمفاتيح السرية باستخدام `secrets.toml`
-- حماية شاملة للملفات الحساسة في `.gitignore`
-- حماية ملفات MS Use Case من النشر العام
-- إعدادات نشر آمنة
+- Secure secret management using `secrets.toml`
+- Comprehensive protection for sensitive files in `.gitignore`
+- MS Use Case files protected from public deployment
+- Secure deployment configurations
+
+## 📁 Project Structure
+
+```
+AbuDhabiCustoms/
+├── streamlit_analysis.py          # Main Streamlit app
+├── report_utils.py               # Report generation utilities
+├── requirements.txt              # Python dependencies
+├── .streamlit/
+│   └── secrets.toml             # Streamlit secrets (DO NOT COMMIT)
+├── .gitignore                   # Git ignore file (updated)
+├── DEPLOYMENT.md               # Deployment guide
+├── README.md                   # This file
+└── service_center_api_schema_RTL_FIXED.json  # Data file
+```
+
+## 🛠️ Technical Stack
+
+- **Frontend**: Streamlit
+- **AI/ML**: Google Gemini Flash API
+- **Data Processing**: Pandas, Plotly
+- **Document Generation**: python-docx
+- **Language Support**: Arabic (RTL) with English interface
