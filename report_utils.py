@@ -101,10 +101,11 @@ class DOCXBuilder:
                 doc.add_paragraph("")
                 continue
 
-            # Remove markdown bold/italic
-            line = re.sub(r"\*\*(.*?)\*\*", r"\1", line)
-            line = re.sub(r"\*(.*?)\*", r"\1", line)
-
+            # Remove ALL markdown formatting (stronger removal)
+            line = re.sub(r"\*\*(.*?)\*\*", r"\1", line)  # **bold**
+            line = re.sub(r"\*(.*?)\*", r"\1", line)      # *italic*
+            line = re.sub(r"\*+", "", line)               # Remove any remaining asterisks
+            
             # Section headers (###)
             if line.startswith("###"):
                 self.add_section_header(
@@ -112,17 +113,20 @@ class DOCXBuilder:
                     line.replace("###", "").strip()
                 )
 
-            # Numbered list: 1. text
+            # Numbered list: 1. text -> Convert to HEADING instead of numbered list
             elif re.match(r"^\d+\.\s+", line):
-                self._add_numbered_item(
-                    doc,
-                    re.sub(r"^\d+\.\s+", "", line)
-                )
+                # Remove number and make it a heading
+                heading_text = re.sub(r"^\d+\.\s+", "", line).strip()
+                if heading_text:
+                    self.add_section_header(doc, heading_text)
 
-            # Bullet list: • text / * text / - text (remove bullet, keep as plain statement)
+            # Bullet list: • text / * text / - text -> Convert to PLAIN STATEMENT
             elif re.match(r"^[•*\-●]\s+", line):
                 # Remove bullet character completely and create plain paragraph
                 bullet_text = re.sub(r"^[•*\-●]\s+", "", line).strip()
+                # Also remove any remaining asterisks from LLM formatting
+                bullet_text = re.sub(r"\*+", "", bullet_text)
+                
                 if bullet_text:  # Only process if there's text after removing bullet
                     # Create normal paragraph without any bullet or dash
                     p = doc.add_paragraph()
@@ -138,11 +142,17 @@ class DOCXBuilder:
 
             # Normal paragraph
             else:
+                # Remove any remaining asterisks from LLM formatting
+                clean_line = re.sub(r"\*+", "", line)
+                
                 p = doc.add_paragraph()
                 p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
                 p.paragraph_format.right_to_left = True
 
-                run = p.add_run(line)
+                # Replace periods with Arabic periods
+                text_with_arabic_periods = clean_line.replace(".", "۔")
+                
+                run = p.add_run(text_with_arabic_periods)
                 run.font.name = self.font
                 run.font.size = Pt(12)
 
