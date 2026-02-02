@@ -105,3 +105,6 @@ streamlit_data_export.txt
 
 # Logo files are needed by the app, so they're not ignored
 # If you have sensitive branding files, add them specifically here
+
+# Debug and testing files
+check_streamlit_secrets.py

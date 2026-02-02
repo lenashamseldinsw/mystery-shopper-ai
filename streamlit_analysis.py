@@ -218,58 +218,119 @@ def load_api_key_from_secrets_file():
 def setup_gemini_api():
     """Setup Gemini API with key from Streamlit secrets, environment, or user input"""
     api_key = None
+    debug_info = []
     
     # Method 1: Try Streamlit secrets (works in Streamlit Cloud)
     try:
-        api_key = st.secrets["gemini"]["api_key"]
-        # Convert to string if it's not already (sometimes st.secrets returns special types)
-        api_key = str(api_key).strip() if api_key else None
-        if api_key and api_key != "your_gemini_api_key_here" and len(api_key) > 10:
-            st.sidebar.success("✅ تم تحميل مفتاح API من الإعدادات الآمنة")
+        # Check if secrets exist at all
+        if hasattr(st, 'secrets'):
+            debug_info.append("✅ st.secrets is available")
+            
+            # Check if gemini section exists
+            if "gemini" in st.secrets:
+                debug_info.append("✅ [gemini] section found in secrets")
+                
+                # Check if api_key exists in gemini section
+                if "api_key" in st.secrets["gemini"]:
+                    debug_info.append("✅ api_key found in [gemini] section")
+                    api_key = st.secrets["gemini"]["api_key"]
+                    
+                    # Convert to string and validate
+                    api_key = str(api_key).strip() if api_key else None
+                    debug_info.append(f"🔍 API key length: {len(api_key) if api_key else 0}")
+                    debug_info.append(f"🔍 API key starts with: {api_key[:10] if api_key else 'None'}...")
+                    
+                    if api_key and api_key != "your_gemini_api_key_here" and len(api_key) > 10:
+                        st.sidebar.success("✅ تم تحميل مفتاح API من الإعدادات الآمنة")
+                        debug_info.append("✅ API key validation passed")
+                    else:
+                        api_key = None
+                        debug_info.append("❌ API key validation failed")
+                else:
+                    debug_info.append("❌ api_key not found in [gemini] section")
+            else:
+                debug_info.append("❌ [gemini] section not found in secrets")
         else:
-            api_key = None
-    except Exception:
+            debug_info.append("❌ st.secrets not available")
+    except Exception as e:
+        debug_info.append(f"❌ st.secrets error: {str(e)}")
         api_key = None
     
     # Method 2: Try direct file reading if st.secrets failed (local development)
     if not api_key:
+        debug_info.append("🔄 Trying direct file reading...")
         api_key = load_api_key_from_secrets_file()
         if api_key and api_key != "your_gemini_api_key_here" and len(api_key) > 10:
             st.sidebar.success("✅ تم تحميل مفتاح API من ملف الإعدادات المحلي")
+            debug_info.append("✅ Direct file reading successful")
         else:
             api_key = None
+            debug_info.append("❌ Direct file reading failed")
     
     # Method 3: Try environment variable (fallback)
     if not api_key:
+        debug_info.append("🔄 Trying environment variable...")
         api_key = os.getenv('GEMINI_API_KEY')
         if api_key and len(api_key) > 10:
             st.sidebar.info("ℹ️ تم تحميل مفتاح API من متغيرات البيئة")
+            debug_info.append("✅ Environment variable successful")
         else:
             api_key = None
+            debug_info.append("❌ Environment variable failed")
+    
+    # Show debug information (temporarily for troubleshooting)
+    with st.sidebar.expander("🐛 Debug Info (for troubleshooting)"):
+        for info in debug_info:
+            st.write(info)
     
     if not api_key:
-        # If no API key in secrets or environment, ask user to input it
-        st.sidebar.warning("⚠️ لم يتم العثور على مفتاح API في الإعدادات الآمنة")
+        # Show error message for deployment configuration
+        # Show main error message
+        st.error("🚨 **Streamlit Cloud Secrets Configuration Required**")
+        st.error("**تكوين المفاتيح السرية في Streamlit Cloud مطلوب**")
         
-        # Show helpful information
-        with st.sidebar.expander("ℹ️ معلومات مفتاح API"):
-            st.write("للحصول على مفتاح API:")
-            st.write("1. اذهب إلى: https://makersuite.google.com/app/apikey")
-            st.write("2. أنشئ مفتاح API جديد")
-            st.write("3. انسخ المفتاح وألصقه أدناه")
-            st.write("")
-            st.write("**للنشر الآمن:** أضف المفتاح إلى `.streamlit/secrets.toml`")
+        col1, col2 = st.columns(2)
         
-        api_key = st.sidebar.text_input(
-            "أدخل مفتاح Gemini API",
-            type="password",
-            help="مطلوب لتوليد التحليلات الذكية",
-            placeholder="AIzaSy..."
-        )
+        with col1:
+            st.subheader("🔧 English Instructions")
+            st.write("**Your app needs API key configuration in Streamlit Cloud:**")
+            st.write("1. Go to your Streamlit Cloud app dashboard")
+            st.write("2. Click **'Settings'** → **'Secrets'**")
+            st.write("3. Add this exact content:")
+            st.code("""[gemini]
+api_key = "your_actual_api_key_here" """)
+            st.write("4. Click **'Save'** and wait for app restart")
+            st.info("💡 Replace `your_actual_api_key_here` with your real Gemini API key")
         
-        if not api_key:
-            st.warning("يرجى إدخال مفتاح Gemini API لتوليد التحليلات الذكية")
-            return None
+        with col2:
+            st.subheader("🔧 التعليمات العربية")
+            st.write("**يحتاج التطبيق إلى تكوين مفتاح API في Streamlit Cloud:**")
+            st.write("1. اذهب إلى لوحة تحكم Streamlit Cloud")
+            st.write("2. اضغط على **'Settings'** ثم **'Secrets'**")
+            st.write("3. أضف النص التالي بالضبط:")
+            st.code("""[gemini]
+api_key = "your_actual_api_key_here" """)
+            st.write("4. اضغط **'Save'** وانتظر إعادة تشغيل التطبيق")
+            st.info("💡 استبدل `your_actual_api_key_here` بمفتاح Gemini API الحقيقي")
+        
+        st.markdown("---")
+        st.subheader("🐛 Debug Information")
+        st.write("Use this information to troubleshoot the configuration:")
+        
+        # Show debug info in main area too
+        for info in debug_info:
+            if "✅" in info:
+                st.success(info)
+            elif "❌" in info:
+                st.error(info)
+            elif "⚠️" in info:
+                st.warning(info)
+            else:
+                st.info(info)
+        
+        st.markdown("---")
+        st.info("🔄 **After configuring secrets, refresh this page to continue.**")
+        st.stop()  # Stop execution instead of asking for manual input
     
     try:
         genai.configure(api_key=api_key)
