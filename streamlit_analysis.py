@@ -224,78 +224,41 @@ def load_api_key_from_secrets_file():
 def setup_gemini_api():
     """Setup Gemini API with key from Streamlit secrets, environment, or user input"""
     api_key = None
-    debug_info = []
     
     # Method 1: Try Streamlit secrets (works in Streamlit Cloud)
     try:
         # Check if secrets exist at all
         if hasattr(st, 'secrets'):
-            debug_info.append("✅ st.secrets is available")
-            
             # Try direct key first (preferred method)
             if "GEMINI_API_KEY" in st.secrets:
-                debug_info.append("✅ GEMINI_API_KEY found directly in secrets")
                 api_key = st.secrets["GEMINI_API_KEY"]
             
             # Fallback: Check [gemini] section for backward compatibility
             elif "gemini" in st.secrets and "api_key" in st.secrets["gemini"]:
-                debug_info.append("✅ api_key found in [gemini] section")
                 api_key = st.secrets["gemini"]["api_key"]
-            
-            else:
-                debug_info.append("❌ No GEMINI_API_KEY found in secrets")
-                # List available keys for debugging (without values)
-                available_keys = list(st.secrets.keys()) if hasattr(st.secrets, 'keys') else []
-                debug_info.append(f"🔍 Available secret keys: {available_keys}")
             
             # Validate the API key if found
             if api_key:
                 # Convert to string and validate
                 api_key = str(api_key).strip() if api_key else None
-                debug_info.append(f"🔍 API key length: {len(api_key) if api_key else 0}")
                 
-                if api_key and api_key not in ["your_gemini_api_key_here", "your_actual_api_key_here"] and len(api_key) > 10:
-                    debug_info.append("✅ API key validation passed")
-                else:
+                if not (api_key and api_key not in ["your_gemini_api_key_here", "your_actual_api_key_here"] and len(api_key) > 10):
                     api_key = None
-                    debug_info.append("❌ API key validation failed")
-        else:
-            debug_info.append("❌ st.secrets not available")
     except Exception as e:
-        debug_info.append(f"❌ st.secrets error: {str(e)}")
         api_key = None
     
     # Method 2: Try direct file reading if st.secrets failed (local development)
     if not api_key:
-        debug_info.append("🔄 Trying direct file reading...")
         api_key = load_api_key_from_secrets_file()
-        if api_key and api_key not in ["your_gemini_api_key_here", "your_actual_api_key_here"] and len(api_key) > 10:
-            debug_info.append("✅ Direct file reading successful")
-        else:
+        if not (api_key and api_key not in ["your_gemini_api_key_here", "your_actual_api_key_here"] and len(api_key) > 10):
             api_key = None
-            debug_info.append("❌ Direct file reading failed")
     
     # Method 3: Try environment variable (fallback)
     if not api_key:
-        debug_info.append("🔄 Trying environment variable...")
         api_key = os.getenv('GEMINI_API_KEY')
-        if api_key and len(api_key) > 10:
-            debug_info.append("✅ Environment variable successful")
-        else:
+        if not (api_key and len(api_key) > 10):
             api_key = None
-            debug_info.append("❌ Environment variable failed")
     
-    # Show debug information (temporarily for troubleshooting)
-    with st.sidebar.expander("🐛 Debug Info (for troubleshooting)"):
-        for info in debug_info:
-            st.write(info)
-        
-        # Show which key is actually being used
-        if api_key:
-            st.write(f"🔑 Using API key: {api_key[:10]}...{api_key[-4:]}")
-            st.write(f"🔍 Key length: {len(api_key)}")
-        else:
-            st.write("❌ No API key loaded")
     
     if not api_key:
         # Show error message for deployment configuration
@@ -580,6 +543,7 @@ def generate_executive_summary(model, data_summary):
 - استخدم أسلوباً تقريرياً مهنياً ومباشراً
 - لا تستخدم عناوين أو نقاط، فقط نص متدفق ومترابط
 - اجعل التحليل موضوعياً وقائماً على البيانات
+- لا تستخدم تنسيق markdown مثل **نص** أو *نص*
 """
 
     try:
@@ -626,6 +590,10 @@ def generate_pillar_analysis(model, pillar_data, pillar_name):
 3. اختتم بجملة تلخص النتيجة العامة للمحور (مرتفع/منخفض/متوسط)
 
 استخدم أسلوباً مهنياً ومترابطاً، ولا تستخدم نقاط أو عناوين فرعية.
+
+تعليمات التنسيق:
+- لا تستخدم تنسيق markdown مثل **نص** أو *نص*
+- اكتب النص بشكل عادي بدون رموز تنسيق
 """
 
     try:
@@ -653,18 +621,33 @@ def generate_recommendations(model, data_summary):
 {json.dumps([f for f in data_summary['detailed_findings'] if f['status'] in ['N', 'R']][:10], ensure_ascii=False, indent=2)}
 
 المطلوب تقسيم المقترحات إلى 5 مجالات رئيسية:
-1. البيئة العامة (2-3 مقترحات)
-2. مواقف السيارات (2-3 مقترحات)  
-3. المبنى (2-3 مقترحات)
-4. القدرة الاستيعابية والانتظار (2-3 مقترحات)
-5. سهولة الوصول إلى الموقع (2-3 مقترحات)
 
-لكل مجال:
-- اكتب عنوان المجال
-- اكتب 2-3 مقترحات محددة وعملية
-- كل مقترح في جملة واحدة واضحة
+### البيئة العامة
+● مقترح محدد وعملي للبيئة العامة
+● مقترح آخر للبيئة العامة
 
-استخدم تنسيق واضح مع عناوين للمجالات ونقاط للمقترحات.
+### مواقف السيارات  
+● مقترح محدد وعملي لمواقف السيارات
+● مقترح آخر لمواقف السيارات
+
+### المبنى
+● مقترح محدد وعملي للمبنى
+● مقترح آخر للمبنى
+
+### القدرة الاستيعابية والانتظار
+● مقترح محدد وعملي للقدرة الاستيعابية
+● مقترح آخر للقدرة الاستيعابية
+
+### سهولة الوصول إلى الموقع
+● مقترح محدد وعملي لسهولة الوصول
+● مقترح آخر لسهولة الوصول
+
+تعليمات مهمة للتنسيق:
+- لا تستخدم قوائم مرقمة (1. 2. 3.)
+- استخدم عناوين بـ ### لكل مجال
+- استخدم رمز ● للنقاط (سيتم تحويله إلى شرطة عربية في التقرير)
+- لا تستخدم تنسيق markdown مثل **نص** أو *نص*
+- اكتب كل مقترح في جملة واضحة ومحددة
 """
 
     try:
@@ -1484,6 +1467,10 @@ def _clean_content(content, is_executive_summary=False):
         
         # Remove lines that are just dashes or separators
         if re.match(r'^[-=]{3,}$', line):
+            continue
+            
+        # Remove unwanted subheading
+        if 'ملخص تنفيذي لتقييم مركز خدمة جمارك أبوظبي' in line:
             continue
         
         # For executive summary, skip the repeated metrics section
