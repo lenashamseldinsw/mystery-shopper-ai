@@ -1,0 +1,108 @@
+# Environment variables
+.env
+.env.local
+.env.production
+.env.staging
+
+# API Keys
+*key*
+*secret*
+*token*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Streamlit
+.streamlit/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# MS Use Case files (sensitive data)
+MS Use Case*.docx
+MS Use Case*.xlsx
+MS Use Case*.pptx
+*use*case*
+*Use*Case*
+
+# Streamlit secrets
+secrets.toml
+.streamlit/secrets.toml
+
+# Additional sensitive file patterns
+*credentials*
+*auth*
+*password*
+*private*
+config.json
+settings.json
+
+# Data export files (may contain sensitive information)
+*export*.txt
+*data_export*
+streamlit_data_export.txt
+
+# Generated reports (may contain sensitive analysis)
+*.docx
+*.pdf
+تقرير_*.docx
+تقرير_*.pdf
+
+# Logo and branding files (optional - remove if you want to include them)
+*logo*.png
+*Logo*.png

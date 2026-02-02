@@ -1,0 +1,253 @@
+[
+  {
+    "pillar_en": "Accessibility",
+    "pillar_ar": "سهولة الوصول",
+    "pillar_score": 1,
+    "sub_pillars": [
+      {
+        "sub_pillar_en": "Navigation",
+        "sub_pillar_ar": "الموقع",
+        "attributes": [
+          {
+            "attribute_en": "Correct address is shown in the results of searching for the service center location on Google Maps",
+            "weight": 1,
+            "type": "SA",
+            "status": "E",
+            "score": 0.1,
+            "notes_ar": "يظهر المركز بعنوانه الصحيح والدقيق على تطبيق خرائط جوجل، مع تحديد واضح لنقطة الوصول، مما يسهم في تسهيل وصول المتعاملين دون الحاجة إلى استفسارات إضافية أو الاعتماد على وسائل إرشاد بديلة. كما أن اسم المركز متطابق مع الاسم المتداول رسميًا، الأمر الذي يقلل من احتمالية الالتباس أو الوصول الخاطئ، خاصة للمتعاملين الجدد أو القادمين من خارج الإمارة.",
+            "report_notes_ar": "جميع المراكز موجودة على خرائط جوجل "
+          }
+        ]
+      },
+      {
+        "sub_pillar_en": "Parking",
+        "sub_pillar_ar": "مواقف السيارات",
+        "attributes": [
+          {
+            "attribute_en": "Adequate parking space is available for customers",
+            "weight": 1,
+            "type": "SA",
+            "status": "E",
+            "score": 0.1,
+            "notes_ar": "تتوفر مواقف سيارات بالقرب من موقع المركز، وتعد مناسبة من حيث العدد في الأوقات الاعتيادية. لم يتم رصد ازدحام واضح أثناء الزيارة، إلا أن الاعتماد على المواقف العامة للمطار قد يشكل تحديًا في أوقات الذروة، خصوصًا للمتعاملين الذين يقصدون المركز لإنجاز معاملات سريعة.",
+            "report_notes_ar": null
+          }
+        ]
+      },
+      {
+        "sub_pillar_en": "Physical Accessibility",
+        "sub_pillar_ar": "إمكانية الوصول المادي",
+        "attributes": [
+          {
+            "attribute_en": "Parking includes spaces for POD customers",
+            "weight": 1,
+            "type": "SA",
+            "status": "E",
+            "score": 0.1,
+            "notes_ar": "تمت ملاحظة وجود مواقف مخصصة لذوي الهمم ضمن نطاق المواقف القريبة من المركز، وهي مطابقة من حيث العلامات الأرضية والموقع العام. إلا أن الربط المباشر بين هذه المواقف ومدخل المركز يحتاج إلى تعزيز من حيث وضوح المسار المخصص.",
+            "report_notes_ar": null
+          },
+          {
+            "attribute_en": "Accessibility from parking to the entrance was obstacle-free for people of determination (at parking area)\n             (   )",
+            "weight": 1,
+            "type": "SA",
+            "status": "E",
+            "score": 0.1,
+            "notes_ar": "المسار الممتد من منطقة مواقف السيارات إلى مدخل مركز الخدمة مستوٍ وخالٍ من العوائق مثل الأرصفة المرتفعة أو العوائق المؤقتة، ما يتيح للأشخاص من ذوي الهمم الحركة بشكل مستقل وآمن دون الحاجة إلى مساعدة إضافية داخل نطاق المواقف.",
+            "report_notes_ar": null
+          },
+          {
+            "attribute_en": "Service center is accessible for POD customers (availability of ramps at the entrance)    POD (   )",
+            "weight": 1,
+            "type": "SA",
+            "status": "E",
+            "score": 0.1,
+            "notes_ar": "يتوفر منحدر مخصص عند مدخل مركز الخدمة يتيح سهولة الدخول لذوي الهمم ومستخدمي الكراسي المتحركة من مواقف السيارات إلى داخل المبنى، ويتميز بانحدار مناسب يحقق متطلبات الوصول الآمن دون التأثير على انسيابية الحركة.",
+            "report_notes_ar": null
+          },
+          {
+            "attribute_en": "Doors and corridors are wide enough for wheelchairs (interior of the building)\n       ( )",
+            "weight": 1,
+            "type": "SA",
+            "status": "N",
+            "score": 0.1,
+            "notes_ar": "الأبواب والممرات داخل مركز الخدمة واسعة بما يكفي لاستيعاب حركة الكراسي المتحركة بسلاسة، دون وجود تضييق أو عوائق داخلية، مما يعكس مراعاة متطلبات التصميم الشامل داخل بيئة تقديم الخدمة.",
+            "report_notes_ar": null
+          },
+          {
+            "attribute_en": "Elevators, escalators, or ramps are available inside the service center. \nNote: select NA if the service center is located inside a mall or a ground floor\n         .\n:  NA",
+            "weight": 1,
+            "type": "SA",
+            "status": "N",
+            "score": "-",
+            "notes_ar": "نظرًا لوقوع مركز الخدمة في مستوى أرضي واحد، لا توجد حاجة لتوفير مصاعد أو سلالم متحركة داخلية، ويُعد الوصول إلى جميع مرافق المركز متاحًا بشكل مباشر.",
+            "report_notes_ar": null
+          }
+        ]
+      },
+      {
+        "sub_pillar_en": "Signage",
+        "sub_pillar_ar": "اللافتات",
+        "attributes": [
+          {
+            "attribute_en": "Directions on signboards were available to guide the customer to the service center",
+            "weight": 2,
+            "type": "SA",
+            "status": "R",
+            "score": 0.2,
+            "notes_ar": "لوحظ توفر لافتات إرشادية داخل نطاق المطار تشير إلى اتجاه مركز البريد الجمركي، إلا أن وضوح بعض اللوحات يحتاج إلى تحسين، سواء من حيث حجم الخط أو تكرار الإشارات في نقاط التحول الرئيسية. بعض اللافتات لا تبرز اسم الخدمة بشكل مباشر، ما قد يتسبب في تردد المتعامل أو حاجته للاستفسار من موظفي الموقع.",
+            "report_notes_ar": "نفس الملاحظة على مركز البريد"
+          },
+          {
+            "attribute_en": "Service center sign is visible and easy to read from a distance",
+            "weight": 2,
+            "type": "SA",
+            "status": "E",
+            "score": 0.2,
+            "notes_ar": "علامة مركز الخدمة مثبتة في موقع ظاهر ويمكن ملاحظتها من مسافة مناسبة داخل نطاق الموقع، مع وضوح في اسم المركز وحجم الخط، مما يساعد المتعاملين على تحديد موقع مركز الخدمة بسهولة دون الحاجة إلى الاقتراب الشديد أو الاستفسار من الموظفين.",
+            "report_notes_ar": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "pillar_en": "Appearance",
+    "pillar_ar": "المظهر",
+    "pillar_score": 0.4,
+    "sub_pillars": [
+      {
+        "sub_pillar_en": "Ambience",
+        "sub_pillar_ar": "الجو العام",
+        "attributes": [
+          {
+            "attribute_en": "Temperature is comfortable and adequate",
+            "weight": 1,
+            "type": "SA",
+            "status": "R",
+            "score": 0.1,
+            "notes_ar": "درجة الحرارة داخل المركز مناسبة بشكل عام، إلا أنها تميل أحيانًا إلى البرودة الزائدة، خاصة في مناطق الانتظار القريبة من فتحات التهوية.",
+            "report_notes_ar": null
+          },
+          {
+            "attribute_en": "Noise levels are average and comfortable",
+            "weight": 1,
+            "type": "SA",
+            "status": "N",
+            "score": 0,
+            "notes_ar": "مستوى الضوضاء داخل المركز متوسط، إلا أن تداخل أصوات المتعاملين والحركة المحيطة في المطار يؤثر جزئيًا على هدوء المكان ويحد من الشعور بالراحة أثناء الانتظار.",
+            "report_notes_ar": null
+          }
+        ]
+      },
+      {
+        "sub_pillar_en": "Cleanliness",
+        "sub_pillar_ar": "نظافة",
+        "attributes": [
+          {
+            "attribute_en": "Exterior of the building is clean",
+            "weight": 1,
+            "type": "SA",
+            "status": "E",
+            "score": 0.1,
+            "notes_ar": "يظهر الجزء الخارجي من المبنى بمستوى نظافة مقبول بشكل عام، إلا أنه لوحظ وجود بعض الأتربة المتراكمة في محيط المداخل الجانبية ومناطق الحركة القريبة من المركز، ما يعطي انطباعًا متوسطًا عن مستوى العناية بالنظافة الخارجية.",
+            "report_notes_ar": null
+          },
+          {
+            "attribute_en": "Interior of the service center is clean",
+            "weight": 1,
+            "type": "SA",
+            "status": "E",
+            "score": 0.1,
+            "notes_ar": "الجزء الداخلي من مركز الخدمة نظيف في مناطق الخدمة الرئيسية، إلا أن بعض الزوايا ومناطق الانتظار الجانبية تحتاج إلى متابعة تنظيف أكثر انتظامًا للحفاظ على مستوى نظافة متسق في جميع أرجاء المركز.",
+            "report_notes_ar": null
+          }
+        ]
+      },
+      {
+        "sub_pillar_en": "Lighting",
+        "sub_pillar_ar": "الضوء",
+        "attributes": [
+          {
+            "attribute_en": "Lighting is adequate and comfortable for reading and waiting",
+            "weight": 1,
+            "type": "SA",
+            "status": "E",
+            "score": 0.1,
+            "notes_ar": "الإضاءة داخل مركز الخدمة كافية من الناحية الوظيفية، إلا أنها تميل إلى الإضاءة البيضاء القوية في بعض المناطق، ما قد يسبب شعورًا بعدم الراحة عند الانتظار لفترات طويلة.",
+            "report_notes_ar": null
+          }
+        ]
+      },
+      {
+        "sub_pillar_en": "Maintenullce",
+        "sub_pillar_ar": "الصيانة",
+        "attributes": [
+          {
+            "attribute_en": "Exterior of the building is well maintained (if applicable) \n        ( )",
+            "weight": 1,
+            "type": "SA",
+            "status": "R",
+            "score": 0,
+            "notes_ar": "الواجهة الخارجية للمبنى تبدو بحالة إنشائية جيدة، إلا أن بعض العناصر الخارجية مثل اللوحات الإرشادية والإطارات المحيطة بالمداخل تظهر عليها آثار تقادم واستخدام طويل دون صيانة تجميلية حديثة.",
+            "report_notes_ar": null
+          },
+          {
+            "attribute_en": "Interior of the service center is well maintained",
+            "weight": 1,
+            "type": "SA",
+            "status": "R",
+            "score": 0,
+            "notes_ar": "تظهر المرافق الداخلية بحالة تشغيلية جيدة، إلا أن بعض قطع الأثاث والتشطيبات الداخلية تبدو مستهلكة نسبيًا وتحتاج إلى صيانة أو تحديث لتحسين المظهر العام للمكان.",
+            "report_notes_ar": "جميع المراكز تابعتيتها ليس لجمارك ابوظبي"
+          }
+        ]
+      },
+      {
+        "sub_pillar_en": "Physical Accessibility",
+        "sub_pillar_ar": "الوصول المادي",
+        "attributes": [
+          {
+            "attribute_en": "Entrance is easily accessible and clearly marked",
+            "weight": 1,
+            "type": "SA",
+            "status": "E",
+            "score": 0,
+            "notes_ar": "المدخل يمكن الوصول إليه بسهولة من المسار الرئيسي، إلا أن تمييزه البصري محدود نسبيًا ولا يبرز بشكل كافٍ كمدخل رسمي لمركز خدمة، مما قد يتسبب في تردد المتعامل قبل التأكد من موقع الدخول الصحيح.",
+            "report_notes_ar": null
+          }
+        ]
+      },
+      {
+        "sub_pillar_en": "Seating",
+        "sub_pillar_ar": null,
+        "attributes": [
+          {
+            "attribute_en": "Dedicated seating area is available for only ladies\nNote: check if there are seats for ladies, not necessary a separate area\n     \n:",
+            "weight": 1,
+            "type": "SA",
+            "status": "E",
+            "score": 0,
+            "notes_ar": "لا توجد مقاعد مخصصة أو مميزة بوضوح للسيدات، مما قد لا يراعي خصوصية بعض المتعاملات، خاصة في أوقات الازدحام داخل منطقة الانتظار.",
+            "report_notes_ar": "الملاحظة تابعة لمركز جمرك البريد غير تابع لجمارك ابوظبي"
+          }
+        ]
+      },
+      {
+        "sub_pillar_en": "Seating\n/",
+        "sub_pillar_ar": "الجلوس الانتظار",
+        "attributes": [
+          {
+            "attribute_en": "Adequate seating is available for waiting customers",
+            "weight": 1,
+            "type": "SA",
+            "status": "N",
+            "score": 0,
+            "notes_ar": "تتوفر أماكن جلوس للمتعاملين المنتظرين، إلا أن عددها محدود مقارنة بعدد المراجعين في أوقات الذروة، ما قد يضطر بعض المتعاملين للوقوف أثناء الانتظار.",
+            "report_notes_ar": null
+          }
+        ]
+      }
+    ]
+  }
+]
