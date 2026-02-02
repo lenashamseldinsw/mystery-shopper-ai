@@ -7,3 +7,4 @@ fpdf2>=2.7.0
 arabic-reshaper>=3.0.0
 python-bidi>=0.4.2
 python-docx>=0.8.11
+toml>=0.10.2

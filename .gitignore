@@ -93,16 +93,15 @@ config.json
 settings.json
 
 # Data export files (may contain sensitive information)
-*export*.txt
-*data_export*
+# Note: streamlit_data_export.txt is generated dynamically by the app
 streamlit_data_export.txt
 
 # Generated reports (may contain sensitive analysis)
-*.docx
-*.pdf
+# Note: Keep the main data file (service_center_api_schema_RTL_FIXED.json) - it's needed by the app
 تقرير_*.docx
 تقرير_*.pdf
+*report*.docx
+*report*.pdf
 
-# Logo and branding files (optional - remove if you want to include them)
-*logo*.png
-*Logo*.png
+# Logo files are needed by the app, so they're not ignored
+# If you have sensitive branding files, add them specifically here

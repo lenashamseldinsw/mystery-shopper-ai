@@ -14,6 +14,12 @@ from datetime import datetime
 import re
 import sys
 
+# Try to import toml for direct secrets file reading
+try:
+    import toml
+except ImportError:
+    toml = None
+
 # Add current directory to path for local imports
 sys.path.append(os.path.dirname(__file__))
 
@@ -197,6 +203,18 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+def load_api_key_from_secrets_file():
+    """Fallback method to read secrets file directly"""
+    secrets_path = ".streamlit/secrets.toml"
+    if os.path.exists(secrets_path) and toml:
+        try:
+            with open(secrets_path, 'r') as f:
+                secrets = toml.load(f)
+                return secrets.get('gemini', {}).get('api_key')
+        except Exception:
+            return None
+    return None
+
 def setup_gemini_api():
     """Setup Gemini API with key from Streamlit secrets, environment, or user input"""
     api_key = None
@@ -204,28 +222,60 @@ def setup_gemini_api():
     # Try to get API key from Streamlit secrets first (recommended for deployment)
     try:
         api_key = st.secrets["gemini"]["api_key"]
-        if api_key and api_key != "your_gemini_api_key_here":
-            st.sidebar.success("✅ تم تحميل مفتاح API من الإعدادات الآمنة")
+        if api_key and api_key != "your_gemini_api_key_here" and len(api_key) > 10:
+            st.sidebar.success("✅ تم تحميل مفتاح API من الإعدادات الآمنة (Streamlit)")
         else:
             api_key = None
-    except (KeyError, FileNotFoundError):
-        # If secrets.toml doesn't exist or doesn't have the key, try environment variable
-        api_key = os.getenv('GEMINI_API_KEY')
-        if api_key:
-            st.sidebar.info("ℹ️ تم تحميل مفتاح API من متغيرات البيئة")
+    except (KeyError, FileNotFoundError, AttributeError):
+        # Fallback: Try to read secrets file directly
+        api_key = load_api_key_from_secrets_file()
+        if api_key and api_key != "your_gemini_api_key_here" and len(api_key) > 10:
+            st.sidebar.success("✅ تم تحميل مفتاح API من الإعدادات الآمنة (ملف)")
+        else:
+            # Try environment variable
+            api_key = os.getenv('GEMINI_API_KEY')
+            if api_key and len(api_key) > 10:
+                st.sidebar.info("ℹ️ تم تحميل مفتاح API من متغيرات البيئة")
+            else:
+                api_key = None
+    except Exception as e:
+        # Fallback for any other secrets loading issues
+        st.sidebar.warning(f"⚠️ مشكلة في تحميل الإعدادات الآمنة: {str(e)}")
+        
+        # Try direct file reading
+        api_key = load_api_key_from_secrets_file()
+        if api_key and len(api_key) > 10:
+            st.sidebar.info("ℹ️ تم تحميل مفتاح API من ملف الإعدادات")
+        else:
+            # Try environment variable
+            api_key = os.getenv('GEMINI_API_KEY')
+            if api_key and len(api_key) > 10:
+                st.sidebar.info("ℹ️ تم تحميل مفتاح API من متغيرات البيئة")
+            else:
+                api_key = None
     
     if not api_key:
         # If no API key in secrets or environment, ask user to input it
         st.sidebar.warning("⚠️ لم يتم العثور على مفتاح API في الإعدادات الآمنة")
+        
+        # Show helpful information
+        with st.sidebar.expander("ℹ️ معلومات مفتاح API"):
+            st.write("للحصول على مفتاح API:")
+            st.write("1. اذهب إلى: https://makersuite.google.com/app/apikey")
+            st.write("2. أنشئ مفتاح API جديد")
+            st.write("3. انسخ المفتاح وألصقه أدناه")
+            st.write("")
+            st.write("**للنشر الآمن:** أضف المفتاح إلى `.streamlit/secrets.toml`")
+        
         api_key = st.sidebar.text_input(
             "أدخل مفتاح Gemini API",
             type="password",
-            help="مطلوب لتوليد التحليلات الذكية. للنشر الآمن، استخدم ملف secrets.toml"
+            help="مطلوب لتوليد التحليلات الذكية",
+            placeholder="AIzaSy..."
         )
         
         if not api_key:
             st.warning("يرجى إدخال مفتاح Gemini API لتوليد التحليلات الذكية")
-            st.info("💡 **للنشر الآمن:** أضف مفتاح API إلى ملف `.streamlit/secrets.toml`")
             return None
     
     try:
@@ -996,7 +1046,7 @@ def generate_html_report(data, overall_score, status_counts, ai_summary, accessi
         pdf.add_page()
         
         # Add logo to header
-        logo_path = "/Users/lena/Documents/Sword/AbuDhabiCustoms/abuDhabiCustomsLogo.png"
+        logo_path = "abuDhabiCustomsLogo.png"
         if os.path.exists(logo_path):
             try:
                 # Center the logo
@@ -1336,8 +1386,8 @@ def save_streamlit_data_to_txt(data, overall_score, status_counts, ai_summary, a
                 
                 content += f"    - {attr_name_en}: {status_text} (النتيجة: {score})\n"
     
-    # Save to file
-    txt_file_path = "/Users/lena/Documents/Sword/AbuDhabiCustoms/streamlit_data_export.txt"
+    # Save to file - use relative path for deployment compatibility
+    txt_file_path = "streamlit_data_export.txt"
     try:
         with open(txt_file_path, 'w', encoding='utf-8') as f:
             f.write(content)
@@ -1423,7 +1473,7 @@ def generate_arabic_docx_from_txt(txt_file_path):
             return None
         
         # Add logo header
-        logo_path = "/Users/lena/Documents/Sword/AbuDhabiCustoms/abuDhabiCustomsLogo.png"
+        logo_path = "abuDhabiCustomsLogo.png"
         docx_builder.add_logo_header(doc, logo_path)
         
         # Add title section - Arabic only
@@ -1492,7 +1542,7 @@ def generate_arabic_docx_from_txt(txt_file_path):
         pdf.add_page()
         
         # Add logo to header
-        logo_path = "/Users/lena/Documents/Sword/AbuDhabiCustoms/abuDhabiCustomsLogo.png"
+        logo_path = "abuDhabiCustomsLogo.png"
         if os.path.exists(logo_path):
             try:
                 pdf.image(logo_path, x=55, y=15, w=100)
@@ -1833,7 +1883,7 @@ def main():
     # Sidebar with logo
     # Display logo in sidebar
     try:
-        st.sidebar.image("/Users/lena/Documents/Sword/AbuDhabiCustoms/abuDhabiCustomsLogo.png", 
+        st.sidebar.image("abuDhabiCustomsLogo.png", 
                         width=250)
     except:
         # Fallback if logo not found
@@ -1843,8 +1893,8 @@ def main():
     st.sidebar.title("إعدادات التحليل")
     
     
-    # Default file path
-    default_file = "/Users/lena/Documents/Sword/AbuDhabiCustoms/service_center_api_schema_RTL_FIXED.json"
+    # Default file path - use relative path for deployment compatibility
+    default_file = "service_center_api_schema_RTL_FIXED.json"
     
     # File upload option
     uploaded_file = st.sidebar.file_uploader(

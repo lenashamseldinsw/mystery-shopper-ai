@@ -133,12 +133,14 @@ AbuDhabiCustoms/
 ├── streamlit_analysis.py          # Main Streamlit app
 ├── report_utils.py               # Report generation utilities
 ├── requirements.txt              # Python dependencies
+├── service_center_api_schema_RTL_FIXED.json  # Data file (REQUIRED)
+├── abuDhabiCustomsLogo.png       # Logo file (REQUIRED)
 ├── .streamlit/
 │   └── secrets.toml             # Streamlit secrets (DO NOT COMMIT)
 ├── .gitignore                   # Git ignore file (updated)
 ├── DEPLOYMENT.md               # This deployment guide
 ├── README.md                   # Project documentation
-└── service_center_api_schema_RTL_FIXED.json  # Data file
+└── streamlit_data_export.txt    # Temp file (auto-generated)
 ```
 
 ## ⚠️ Security Best Practices
