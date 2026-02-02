@@ -210,7 +210,13 @@ def load_api_key_from_secrets_file():
         try:
             with open(secrets_path, 'r') as f:
                 secrets = toml.load(f)
-                return secrets.get('gemini', {}).get('api_key')
+                # Try direct key first
+                if 'GEMINI_API_KEY' in secrets:
+                    return secrets['GEMINI_API_KEY']
+                # Fallback to section-based key
+                elif 'gemini' in secrets and 'api_key' in secrets['gemini']:
+                    return secrets['gemini']['api_key']
+                return None
         except Exception:
             return None
     return None
@@ -226,28 +232,33 @@ def setup_gemini_api():
         if hasattr(st, 'secrets'):
             debug_info.append("✅ st.secrets is available")
             
-            # Check if gemini section exists
-            if "gemini" in st.secrets:
-                debug_info.append("✅ [gemini] section found in secrets")
-                
-                # Check if api_key exists in gemini section
-                if "api_key" in st.secrets["gemini"]:
-                    debug_info.append("✅ api_key found in [gemini] section")
-                    api_key = st.secrets["gemini"]["api_key"]
-                    
-                    # Convert to string and validate
-                    api_key = str(api_key).strip() if api_key else None
-                    debug_info.append(f"🔍 API key length: {len(api_key) if api_key else 0}")
-                    
-                    if api_key and api_key != "your_gemini_api_key_here" and len(api_key) > 10:
-                        debug_info.append("✅ API key validation passed")
-                    else:
-                        api_key = None
-                        debug_info.append("❌ API key validation failed")
-                else:
-                    debug_info.append("❌ api_key not found in [gemini] section")
+            # Try direct key first (preferred method)
+            if "GEMINI_API_KEY" in st.secrets:
+                debug_info.append("✅ GEMINI_API_KEY found directly in secrets")
+                api_key = st.secrets["GEMINI_API_KEY"]
+            
+            # Fallback: Check [gemini] section for backward compatibility
+            elif "gemini" in st.secrets and "api_key" in st.secrets["gemini"]:
+                debug_info.append("✅ api_key found in [gemini] section")
+                api_key = st.secrets["gemini"]["api_key"]
+            
             else:
-                debug_info.append("❌ [gemini] section not found in secrets")
+                debug_info.append("❌ No GEMINI_API_KEY found in secrets")
+                # List available keys for debugging (without values)
+                available_keys = list(st.secrets.keys()) if hasattr(st.secrets, 'keys') else []
+                debug_info.append(f"🔍 Available secret keys: {available_keys}")
+            
+            # Validate the API key if found
+            if api_key:
+                # Convert to string and validate
+                api_key = str(api_key).strip() if api_key else None
+                debug_info.append(f"🔍 API key length: {len(api_key) if api_key else 0}")
+                
+                if api_key and api_key not in ["your_gemini_api_key_here", "your_actual_api_key_here"] and len(api_key) > 10:
+                    debug_info.append("✅ API key validation passed")
+                else:
+                    api_key = None
+                    debug_info.append("❌ API key validation failed")
         else:
             debug_info.append("❌ st.secrets not available")
     except Exception as e:
@@ -258,7 +269,7 @@ def setup_gemini_api():
     if not api_key:
         debug_info.append("🔄 Trying direct file reading...")
         api_key = load_api_key_from_secrets_file()
-        if api_key and api_key != "your_gemini_api_key_here" and len(api_key) > 10:
+        if api_key and api_key not in ["your_gemini_api_key_here", "your_actual_api_key_here"] and len(api_key) > 10:
             debug_info.append("✅ Direct file reading successful")
         else:
             api_key = None
@@ -278,6 +289,13 @@ def setup_gemini_api():
     with st.sidebar.expander("🐛 Debug Info (for troubleshooting)"):
         for info in debug_info:
             st.write(info)
+        
+        # Show which key is actually being used
+        if api_key:
+            st.write(f"🔑 Using API key: {api_key[:10]}...{api_key[-4:]}")
+            st.write(f"🔍 Key length: {len(api_key)}")
+        else:
+            st.write("❌ No API key loaded")
     
     if not api_key:
         # Show error message for deployment configuration
@@ -293,10 +311,10 @@ def setup_gemini_api():
             st.write("1. Go to your Streamlit Cloud app dashboard")
             st.write("2. Click **'Settings'** → **'Secrets'**")
             st.write("3. Add this exact content:")
-            st.code("""[gemini]
-api_key = "your_actual_api_key_here" """)
+            st.code("""GEMINI_API_KEY = "your_actual_api_key_here" """)
             st.write("4. Click **'Save'** and wait for app restart")
             st.info("💡 Replace `your_actual_api_key_here` with your real Gemini API key")
+            st.info("🔗 Get your API key from: https://aistudio.google.com/app/apikey")
         
         with col2:
             st.subheader("🔧 التعليمات العربية")
@@ -304,10 +322,10 @@ api_key = "your_actual_api_key_here" """)
             st.write("1. اذهب إلى لوحة تحكم Streamlit Cloud")
             st.write("2. اضغط على **'Settings'** ثم **'Secrets'**")
             st.write("3. أضف النص التالي بالضبط:")
-            st.code("""[gemini]
-api_key = "your_actual_api_key_here" """)
+            st.code("""GEMINI_API_KEY = "your_actual_api_key_here" """)
             st.write("4. اضغط **'Save'** وانتظر إعادة تشغيل التطبيق")
             st.info("💡 استبدل `your_actual_api_key_here` بمفتاح Gemini API الحقيقي")
+            st.info("🔗 احصل على مفتاح API من: https://aistudio.google.com/app/apikey")
         
         st.markdown("---")
         st.subheader("🐛 Debug Information")
