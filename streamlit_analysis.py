@@ -219,40 +219,33 @@ def setup_gemini_api():
     """Setup Gemini API with key from Streamlit secrets, environment, or user input"""
     api_key = None
     
-    # Try to get API key from Streamlit secrets first (recommended for deployment)
+    # Method 1: Try Streamlit secrets (works in Streamlit Cloud)
     try:
         api_key = st.secrets["gemini"]["api_key"]
+        # Convert to string if it's not already (sometimes st.secrets returns special types)
+        api_key = str(api_key).strip() if api_key else None
         if api_key and api_key != "your_gemini_api_key_here" and len(api_key) > 10:
-            st.sidebar.success("✅ تم تحميل مفتاح API من الإعدادات الآمنة (Streamlit)")
+            st.sidebar.success("✅ تم تحميل مفتاح API من الإعدادات الآمنة")
         else:
             api_key = None
-    except (KeyError, FileNotFoundError, AttributeError):
-        # Fallback: Try to read secrets file directly
+    except Exception:
+        api_key = None
+    
+    # Method 2: Try direct file reading if st.secrets failed (local development)
+    if not api_key:
         api_key = load_api_key_from_secrets_file()
         if api_key and api_key != "your_gemini_api_key_here" and len(api_key) > 10:
-            st.sidebar.success("✅ تم تحميل مفتاح API من الإعدادات الآمنة (ملف)")
+            st.sidebar.success("✅ تم تحميل مفتاح API من ملف الإعدادات المحلي")
         else:
-            # Try environment variable
-            api_key = os.getenv('GEMINI_API_KEY')
-            if api_key and len(api_key) > 10:
-                st.sidebar.info("ℹ️ تم تحميل مفتاح API من متغيرات البيئة")
-            else:
-                api_key = None
-    except Exception as e:
-        # Fallback for any other secrets loading issues
-        st.sidebar.warning(f"⚠️ مشكلة في تحميل الإعدادات الآمنة: {str(e)}")
-        
-        # Try direct file reading
-        api_key = load_api_key_from_secrets_file()
+            api_key = None
+    
+    # Method 3: Try environment variable (fallback)
+    if not api_key:
+        api_key = os.getenv('GEMINI_API_KEY')
         if api_key and len(api_key) > 10:
-            st.sidebar.info("ℹ️ تم تحميل مفتاح API من ملف الإعدادات")
+            st.sidebar.info("ℹ️ تم تحميل مفتاح API من متغيرات البيئة")
         else:
-            # Try environment variable
-            api_key = os.getenv('GEMINI_API_KEY')
-            if api_key and len(api_key) > 10:
-                st.sidebar.info("ℹ️ تم تحميل مفتاح API من متغيرات البيئة")
-            else:
-                api_key = None
+            api_key = None
     
     if not api_key:
         # If no API key in secrets or environment, ask user to input it
