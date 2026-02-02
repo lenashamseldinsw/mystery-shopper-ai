@@ -1469,6 +1469,10 @@ def _clean_content(content, is_executive_summary=False):
         if re.match(r'^[-=]{3,}$', line):
             continue
             
+        # Remove lines that start with single dash and space (like "- Correct address...")
+        if re.match(r'^-\s+', line):
+            continue
+            
         # Remove unwanted subheading
         if 'ملخص تنفيذي لتقييم مركز خدمة جمارك أبوظبي' in line:
             continue
@@ -1565,11 +1569,7 @@ def generate_arabic_docx_from_txt(txt_file_path):
         
         for section_key, arabic_section_title in section_titles.items():
             if section_key in sections and sections[section_key].strip():
-                # Add page break for major sections (except first)
-                if section_key != 'الملخص التنفيذي':
-                    doc.add_page_break()
-                
-                # Add section header
+                # Add section header (no page breaks to avoid blank pages)
                 docx_builder.add_section_header(doc, arabic_section_title)
                 
                 # Clean the content from markdown and unwanted repeated text
