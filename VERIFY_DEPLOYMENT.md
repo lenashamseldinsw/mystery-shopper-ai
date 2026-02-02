@@ -13,7 +13,7 @@ If your deployed app shows configuration errors or asks for manual API key input
 
 ```toml
 [gemini]
-api_key = "AIzaSyB3mJJU-eWiAmndJm_Pz3wIHwLh_PJECtM"
+api_key = "your_actual_gemini_api_key_here"
 ```
 
 ### Step 2: Common Configuration Mistakes
@@ -38,7 +38,7 @@ key = "AIzaSy..."  # Should be api_key
 ✅ **Correct format:**
 ```toml
 [gemini]
-api_key = "AIzaSyB3mJJU-eWiAmndJm_Pz3wIHwLh_PJECtM"
+api_key = "your_actual_gemini_api_key_here"
 ```
 
 ### Step 3: Debug Your Configuration
