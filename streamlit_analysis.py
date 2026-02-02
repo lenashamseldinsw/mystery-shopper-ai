@@ -238,10 +238,8 @@ def setup_gemini_api():
                     # Convert to string and validate
                     api_key = str(api_key).strip() if api_key else None
                     debug_info.append(f"🔍 API key length: {len(api_key) if api_key else 0}")
-                    debug_info.append(f"🔍 API key starts with: {api_key[:10] if api_key else 'None'}...")
                     
                     if api_key and api_key != "your_gemini_api_key_here" and len(api_key) > 10:
-                        st.sidebar.success("✅ تم تحميل مفتاح API من الإعدادات الآمنة")
                         debug_info.append("✅ API key validation passed")
                     else:
                         api_key = None
@@ -261,7 +259,6 @@ def setup_gemini_api():
         debug_info.append("🔄 Trying direct file reading...")
         api_key = load_api_key_from_secrets_file()
         if api_key and api_key != "your_gemini_api_key_here" and len(api_key) > 10:
-            st.sidebar.success("✅ تم تحميل مفتاح API من ملف الإعدادات المحلي")
             debug_info.append("✅ Direct file reading successful")
         else:
             api_key = None
@@ -272,7 +269,6 @@ def setup_gemini_api():
         debug_info.append("🔄 Trying environment variable...")
         api_key = os.getenv('GEMINI_API_KEY')
         if api_key and len(api_key) > 10:
-            st.sidebar.info("ℹ️ تم تحميل مفتاح API من متغيرات البيئة")
             debug_info.append("✅ Environment variable successful")
         else:
             api_key = None
