@@ -1569,7 +1569,11 @@ def generate_arabic_docx_from_txt(txt_file_path):
         
         for section_key, arabic_section_title in section_titles.items():
             if section_key in sections and sections[section_key].strip():
-                # Add section header (no page breaks to avoid blank pages)
+                # Add page break for each section (except the first one)
+                if section_key != 'الملخص التنفيذي':
+                    doc.add_page_break()
+                
+                # Add section header
                 docx_builder.add_section_header(doc, arabic_section_title)
                 
                 # Clean the content from markdown and unwanted repeated text
