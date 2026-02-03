@@ -345,17 +345,52 @@ def setup_gemini_api():
         return None
 
 def clean_and_format_text(text):
-    """Clean asterisk formatting and convert to proper HTML bold"""
+    """Clean asterisk formatting, hashtags, and convert to proper HTML"""
     if not text:
         return text
     
-    # Replace **text** with <b>text</b>
     import re
+    
+    # Remove hashtags from headings (### text → text)
+    text = re.sub(r'#{1,6}\s*(.+)', r'<h3 style="text-align: right; color: #1f4e79; margin-top: 20px;">\1</h3>', text)
+    
+    # Replace **text** with <b>text</b>
     text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', text)
     # Replace *text* with <i>text</i>
     text = re.sub(r'\*(.*?)\*', r'<i>\1</i>', text)
     
-    return text
+    # Convert bullet points to proper HTML lists
+    lines = text.split('\n')
+    formatted_lines = []
+    in_list = False
+    
+    for line in lines:
+        line = line.strip()
+        if not line:
+            if in_list:
+                formatted_lines.append('</ul>')
+                in_list = False
+            formatted_lines.append('<br>')
+            continue
+            
+        # Check if line is a bullet point
+        if re.match(r'^[•*\-●]\s+', line):
+            bullet_text = re.sub(r'^[•*\-●]\s+', '', line).strip()
+            if not in_list:
+                formatted_lines.append('<ul style="text-align: right; direction: rtl;">')
+                in_list = True
+            formatted_lines.append(f'<li style="margin: 8px 0;">{bullet_text}</li>')
+        else:
+            if in_list:
+                formatted_lines.append('</ul>')
+                in_list = False
+            if line:
+                formatted_lines.append(f'<p style="text-align: right; direction: rtl; margin: 10px 0;">{line}</p>')
+    
+    if in_list:
+        formatted_lines.append('</ul>')
+    
+    return '\n'.join(formatted_lines)
 
 def load_data(file_path):
     """Load JSON data from file"""
@@ -538,8 +573,8 @@ def generate_executive_summary(model, data_summary):
 5. اذكر الأرقام والنسب المئوية بشكل طبيعي في النص
 
 تعليمات مهمة:
-- لا تبدأ بعبارات مثل "يسرنا تقديم" أو "نتشرف بتقديم" أو أي عبارات ترحيبية
-- ابدأ مباشرة بالتحليل والنتائج
+- ابدأ الفقرة الأولى بالضبط بهذا النص: "أظهرت نتائج زيارة المتسوق السري أن"
+- لا تستخدم أي عبارات ترحيبية أخرى مثل "يسرنا تقديم" أو "نتشرف بتقديم"
 - استخدم أسلوباً تقريرياً مهنياً ومباشراً
 - لا تستخدم عناوين أو نقاط، فقط نص متدفق ومترابط
 - اجعل التحليل موضوعياً وقائماً على البيانات
