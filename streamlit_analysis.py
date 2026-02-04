@@ -603,12 +603,15 @@ def generate_executive_summary(model, data_summary):
 def generate_pillar_analysis(model, pillar_data, pillar_name):
     """Generate detailed analysis for a specific pillar"""
     
+    # Convert score to percentage
+    pillar_score_percentage = pillar_data['pillar_score'] * 100
+    
     prompt = f"""
 أنت محلل خبير في تقييم مراكز الخدمة. اكتب تحليلاً تفصيلياً لمحور "{pillar_name}" بناءً على البيانات التالية:
 
 بيانات المحور:
 - اسم المحور: {pillar_data['pillar_name_ar']}
-- نتيجة المحور: {pillar_data['pillar_score']}
+- نتيجة المحور: {pillar_score_percentage:.0f}% (من 100%)
 - العناصر المتميزة: {pillar_data['status_counts']['E']}
 - العناصر التي تحتاج تحسين: {pillar_data['status_counts']['R']}
 - العناصر الحرجة: {pillar_data['status_counts']['N']}
@@ -617,7 +620,7 @@ def generate_pillar_analysis(model, pillar_data, pillar_name):
 {json.dumps(pillar_data['sub_pillars'], ensure_ascii=False, indent=2)}
 
 المطلوب:
-1. ابدأ بجملة تلخص الأداء العام للمحور مع ذكر النسبة المئوية
+1. ابدأ بجملة تلخص الأداء العام للمحور مع ذكر النسبة المئوية الصحيحة ({pillar_score_percentage:.0f}%)
 2. اكتب فقرة تحليلية تفصيلية (150-200 كلمة) تشمل:
    - النقاط الإيجابية المحققة
    - التحديات والفجوات المحددة
@@ -629,6 +632,7 @@ def generate_pillar_analysis(model, pillar_data, pillar_name):
 تعليمات التنسيق:
 - لا تستخدم تنسيق markdown مثل **نص** أو *نص*
 - اكتب النص بشكل عادي بدون رموز تنسيق
+- تأكد من استخدام النسبة المئوية الصحيحة: {pillar_score_percentage:.0f}%
 """
 
     try:
